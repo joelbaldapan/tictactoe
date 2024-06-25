@@ -7,5 +7,40 @@
     <script src="script.js" defer></script>
     <title>Tic Tac Toe</title>
   </head>
-  <body></body>
+  <body>
+    <header><h1>Tic Tac Toe</h1></header>
+
+    <main>
+      <title>Set your settings!</title>
+
+      <section id="settingsContainer">
+        <div>
+          <h2>Your symbol:</h2>
+          <button>⭕</button>
+
+          <h2>AI Difficulty:</h2>
+          <select name="difficulty" id="difficulty">
+            <option value="easy">🐣Easy</option>
+            <option value="medium">🐸Medium</option>
+            <option value="hard">🐶Hard</option>
+            <option value="impossible">🦁💥Impossible</option>
+          </select>
+        </div>
+      </section>
+
+      <section id="cellContainer">
+        <div cellIndex="0" class="cell">❌</div>
+        <div cellIndex="1" class="cell">❌</div>
+        <div cellIndex="2" class="cell">❌</div>
+        <div cellIndex="3" class="cell">❌</div>
+        <div cellIndex="4" class="cell">❌</div>
+        <div cellIndex="5" class="cell">❌</div>
+        <div cellIndex="6" class="cell">❌</div>
+        <div cellIndex="7" class="cell">❌</div>
+        <div cellIndex="8" class="cell">❌</div>
+      </section>
+    </main>
+
+    <footer>--For the Odin Project--</footer>
+  </body>
 </html>
