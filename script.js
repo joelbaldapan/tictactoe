@@ -20,11 +20,11 @@ class Player {
   }
 
   setName() {
-    return prompt("What is your name?");
+    return "A";
   }
 
   setSymbol() {
-    return prompt("What is your symbol?");
+    return "B";
   }
 }
 

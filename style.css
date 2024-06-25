@@ -1,0 +1,142 @@
+:root {
+  --pri-dark: #183e57;
+  --pri-neutral: #22577a;
+  --pri-light: #38a3a5;
+  --pri-lighter: #dbf4f6;
+  --sec-dark: #57cc99;
+  --sec-neutral: #80ed99;
+  --sec-light: #c7f9cc;
+  --sec-lighter: #e0f7e2;
+
+  --w-pri-dark: #3e10b3;
+  --w-pri-light: #5400fd;
+  --w-sec-dark: #8c1278;
+  --w-sec-light: #da3f3f;
+  --w-accent: #d5cc17;
+  --w-background: #040115;
+  --w-text: #cddbec;
+
+  --cell-size: min(8rem, 15vw);
+
+  --font-main: "Zilla Slab", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: "Zilla Slab";
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background-color: var(--w-background);
+  color: var(--w-text);
+
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+header {
+  width: 100%;
+  height: 10rem;
+  background-color: var(--w-sec-dark);
+  margin-bottom: 50px;
+  text-align: center;
+  font-family: var(--font-w-main);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 5rem;
+}
+
+footer {
+  width: 100%;
+  height: 10rem;
+  background-color: var(--w-sec-dark);
+  margin-top: 50px;
+  text-align: center;
+  font-family: var(--font-w-main);
+}
+
+p {
+  font-size: 2rem;
+}
+
+h2 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+button {
+  font-size: 1.5rem;
+}
+
+select {
+  font-size: 1.5rem;
+}
+
+#settingsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0.5rem;
+}
+
+#settingsContainer > * {
+  display: flex;
+  justify-content: center;
+  padding: 0 1em;
+}
+
+#cellContainer {
+  display: grid;
+  width: min(24rem, 45vw);
+  margin: 2rem auto 0;
+  grid-template-columns: repeat(3, auto);
+  gap: 0rem;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 0.3rem solid;
+  font-size: min(4rem, 8vw);
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: none;
+}
+
+.cell:nth-child(-n + 3) {
+  border-top: none;
+}
+
+.cell:nth-child(n + 7) {
+  border-bottom: none;
+}
