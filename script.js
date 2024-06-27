@@ -50,6 +50,8 @@ class GameController {
   makeMove(index) {
     // If game is over and cell is full, then don't make move.
     const board = this.gameboard.getBoard();
+    console.log(board, this.gameOver);
+
     if (this.gameOver || board[index] !== "") return;
 
     // Human's Turn
@@ -64,8 +66,12 @@ class GameController {
   checkWin() {
     const board = this.gameboard.getBoard();
     const currentMarker = this.currentPlayer;
+    displayController.updateDisplay();
     if (this.isWin(board, currentMarker)) {
       // Current human wins!
+      this.gameOver = true;
+    } else if (this.isLose(board, currentMarker)) {
+      // Current AI wins!
       this.gameOver = true;
     } else if (this.isTie(board)) {
       // No one wins!
