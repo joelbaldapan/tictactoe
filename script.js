@@ -89,13 +89,32 @@ class GameController {
 
   decideAI() {
     if (this.gameOver) return;
+    // Minimax & precision algorithm
     const newBoard = [...this.gameboard.getBoard()];
+    const possibleMoves = this.getAvailableMoves(newBoard);
+    const bestIndex = this.minimax(newBoard, 9, this.computer.marker).index;
+    const indexAI = this.getIndex(possibleMoves, bestIndex);
 
-    const indexAI = this.minimax(newBoard, 9, this.computer.marker).index;
     this.gameboard.updateBoard(this.computer.marker, indexAI);
     this.checkWin();
     this.switchPlayer();
     displayController.updateDisplay();
+  }
+
+  getIndex(possibleMoves, bestIndex) {
+    let precision;
+    if (this.difficulty === "easy") precision = 0.3;
+    if (this.difficulty === "medium") precision = 0.6;
+    if (this.difficulty === "hard") precision = 0.9;
+    if (this.difficulty === "impossible") precision = 1;
+    const randomNumber = Math.random();
+
+    if (precision > randomNumber) {
+      return bestIndex;
+    } else {
+      const randomIndex = Math.floor(Math.random() * possibleMoves.length);
+      return possibleMoves[randomIndex];
+    }
   }
 
   getAvailableMoves(newBoard) {
@@ -148,6 +167,12 @@ class GameController {
     if (currentMarker === this.computer.marker) {
       let bestScore = -Infinity;
       moves.forEach((move) => {
+        if (move.score === bestScore) {
+          if (Math.random() < 0.5) {
+            bestScore = move.score;
+            bestMove = move;
+          }
+        }
         if (move.score > bestScore) {
           bestScore = move.score;
           bestMove = move;
@@ -156,6 +181,12 @@ class GameController {
     } else {
       let bestScore = +Infinity;
       moves.forEach((move) => {
+        if (move.score === bestScore) {
+          if (Math.random() < 0.5) {
+            bestScore = move.score;
+            bestMove = move;
+          }
+        }
         if (move.score < bestScore) {
           bestScore = move.score;
           bestMove = move;
@@ -210,14 +241,16 @@ class DisplayController {
     this.cells = Array.from(document.getElementsByClassName("cell"));
     this.startBtn = document.getElementById("start-btn");
     this.symbolBtn = document.getElementById("symbol-btn");
-    this.difficulty = document.getElementById("difficulty");
+    this.difficultySelect = document.getElementById("difficulty");
 
     // Initialize game controller
     this.gameController = new GameController();
 
     this.startBtn.addEventListener("click", () => {
+      this.startBtn.textContent = "Start";
+
       const playerMarker = this.symbolBtn.textContent;
-      const difficulty = this.difficulty.value;
+      const difficulty = this.difficultySelect.value;
       this.gameController.startGame(playerMarker, difficulty);
       this.updateDisplay();
     });
@@ -232,6 +265,10 @@ class DisplayController {
       cell.addEventListener("click", () => {
         this.gameController.makeMove(index);
       });
+    });
+
+    this.difficultySelect.addEventListener("change", () => {
+      this.startBtn.textContent = "Unsaved Changes!";
     });
   }
 
