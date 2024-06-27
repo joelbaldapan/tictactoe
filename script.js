@@ -13,7 +13,6 @@ class Gameboard {
 
   updateBoard(marker, index) {
     this.board.splice(index, 1, marker);
-    console.log(this.board);
   }
 }
 
@@ -43,6 +42,9 @@ class GameController {
     this.gameboard = new Gameboard();
     this.gameOver = false;
     this.difficulty = difficulty;
+
+    // Make AI do move if it's first.
+    if (playerMarker === "⭕") this.decideAI();
   }
 
   makeMove(index) {
@@ -50,18 +52,13 @@ class GameController {
     const board = this.gameboard.getBoard();
     if (this.gameOver || board[index] !== "") return;
 
+    // Human's Turn
     this.gameboard.updateBoard(this.human.marker, index);
     this.checkWin();
     this.switchPlayer();
-    displayController.updateDisplay();
 
     // AI's Turn
-    if (this.gameOver) return;
-    const indexAI = this.decideAI().index;
-    this.gameboard.updateBoard(this.computer.marker, indexAI);
-    this.checkWin();
-    this.switchPlayer();
-    displayController.updateDisplay();
+    this.decideAI();
   }
 
   checkWin() {
@@ -85,8 +82,14 @@ class GameController {
   }
 
   decideAI() {
+    if (this.gameOver) return;
     const newBoard = [...this.gameboard.getBoard()];
-    return this.minimax(newBoard, 9, this.computer.marker);
+
+    const indexAI = this.minimax(newBoard, 9, this.computer.marker).index;
+    this.gameboard.updateBoard(this.computer.marker, indexAI);
+    this.checkWin();
+    this.switchPlayer();
+    displayController.updateDisplay();
   }
 
   getAvailableMoves(newBoard) {
@@ -112,15 +115,15 @@ class GameController {
 
     const moves = [];
 
-    // Loop through available moves using forEach
+    // Loop through available moves.
     availableMoves.forEach((moveIndex) => {
       const move = {};
       move.index = moveIndex;
 
-      // Make a move
+      // Make a move.
       newBoard[moveIndex] = currentMarker;
 
-      // Call minimax recursively and store the score
+      // Call minimax recursively and store the score.
       if (currentMarker === this.computer.marker) {
         const result = this.minimax(newBoard, depth - 1, this.human.marker);
         move.score = result.score;
@@ -129,16 +132,12 @@ class GameController {
         move.score = result.score;
       }
 
-      // Undo the move
+      // Undo and store the move.
       newBoard[moveIndex] = "";
-
-      // Store the move
       moves.push(move);
     });
 
-    console.log(moves);
-
-    // Choose the best move
+    // Choose the best move.
     let bestMove;
     if (currentMarker === this.computer.marker) {
       let bestScore = -Infinity;
@@ -157,7 +156,6 @@ class GameController {
         }
       });
     }
-    console.log(bestMove);
     return bestMove;
   }
 
@@ -215,6 +213,13 @@ class DisplayController {
       const playerMarker = this.symbolBtn.textContent;
       const difficulty = this.difficulty.value;
       this.gameController.startGame(playerMarker, difficulty);
+      this.updateDisplay();
+    });
+
+    this.symbolBtn.addEventListener("click", () => {
+      const currentText = this.symbolBtn.textContent;
+      if (currentText === "❌") this.symbolBtn.textContent = "⭕";
+      else if (currentText === "⭕") this.symbolBtn.textContent = "❌";
     });
 
     this.cells.forEach((cell, index) => {
@@ -232,8 +237,9 @@ class DisplayController {
   }
 }
 
-// Initialize DisplayController
+// Initialize DisplayController and Automatically start game
 const displayController = new DisplayController();
+displayController.gameController.startGame("❌", "easy");
 
 // ----
 // LOGO
