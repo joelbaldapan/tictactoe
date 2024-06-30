@@ -57,25 +57,33 @@ class GameController {
     // Human's Turn
     playBtnSFX();
     this.gameboard.updateBoard(this.human.marker, index);
-    this.checkWin();
+    this.checkWin("human");
     this.switchPlayer();
 
     // AI's Turn
     this.decideAI();
   }
 
-  checkWin() {
+  checkWin(checkWho) {
     const board = this.gameboard.getBoard();
     const currentMarker = this.currentPlayer;
     displayController.updateDisplay();
     if (this.isWin(board, currentMarker)) {
       // Current human wins!
       this.gameOver = true;
-      displayController.gameOver(`You win!`);
+      if (checkWho === "human") {
+        displayController.gameOver(`You win!`);
+      } else {
+        displayController.gameOver(`You lose!`);
+      }
     } else if (this.isLose(board, currentMarker)) {
       // Current AI wins!
       this.gameOver = true;
-      displayController.gameOver(`You lose!`);
+      if (checkWho === "human") {
+        displayController.gameOver(`You win!`);
+      } else {
+        displayController.gameOver(`You lose!`);
+      }
     } else if (this.isTie(board)) {
       // No one wins!
       this.gameOver = true;
@@ -100,7 +108,7 @@ class GameController {
     const indexAI = this.getIndex(possibleMoves, bestIndex);
 
     this.gameboard.updateBoard(this.computer.marker, indexAI);
-    this.checkWin();
+    this.checkWin("computer");
     this.switchPlayer();
     displayController.updateDisplay();
   }
