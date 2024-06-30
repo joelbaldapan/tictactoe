@@ -303,6 +303,8 @@ class DisplayController {
 // Initialize DisplayController and Automatically start game
 const displayController = new DisplayController();
 displayController.gameController.startGame("❌", "easy");
+displayController.gameController.gameOver = true;
+displayController.gameOver();
 
 // -----
 // AUDIO
