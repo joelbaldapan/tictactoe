@@ -58,7 +58,7 @@ header {
 }
 
 h1 {
-  font-size: 5rem;
+  font-size: 4rem;
 }
 
 footer {
@@ -72,7 +72,7 @@ footer {
 }
 
 p {
-  font-size: rem;
+  font-size: 1rem;
 }
 
 #logo {
@@ -112,12 +112,12 @@ main {
 
 h2 {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 h3 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 button {
@@ -156,7 +156,7 @@ select {
 #cell-container {
   display: grid;
   width: min(24rem, 60vw);
-  margin: 2rem auto 0;
+  margin: 2rem auto;
   grid-template-columns: repeat(3, auto);
   gap: 0rem;
 }
@@ -188,4 +188,8 @@ select {
 
 .cell:nth-child(n + 7) {
   border-bottom: none;
+}
+
+.filled {
+  cursor: not-allowed;
 }

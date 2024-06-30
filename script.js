@@ -55,6 +55,7 @@ class GameController {
     if (this.gameOver || board[index] !== "") return;
 
     // Human's Turn
+    playBtnSFX();
     this.gameboard.updateBoard(this.human.marker, index);
     this.checkWin();
     this.switchPlayer();
@@ -70,12 +71,15 @@ class GameController {
     if (this.isWin(board, currentMarker)) {
       // Current human wins!
       this.gameOver = true;
+      displayController.gameOver(`You win!`);
     } else if (this.isLose(board, currentMarker)) {
       // Current AI wins!
       this.gameOver = true;
+      displayController.gameOver(`You lose!`);
     } else if (this.isTie(board)) {
       // No one wins!
       this.gameOver = true;
+      displayController.gameOver(`It's a draw!`);
     } else {
       // The game continues.
       this.switchPlayer();
@@ -242,23 +246,26 @@ class DisplayController {
     this.startBtn = document.getElementById("start-btn");
     this.symbolBtn = document.getElementById("symbol-btn");
     this.difficultySelect = document.getElementById("difficulty");
+    this.gameOverText = document.getElementById("gameover");
 
     // Initialize game controller
     this.gameController = new GameController();
 
     this.startBtn.addEventListener("click", () => {
-      this.startBtn.textContent = "Start";
-
+      this.startBtn.textContent = "Restart";
       const playerMarker = this.symbolBtn.textContent;
       const difficulty = this.difficultySelect.value;
       this.gameController.startGame(playerMarker, difficulty);
+      this.gameOver(`You're playing as ${playerMarker}!`);
       this.updateDisplay();
+      playResetSFX();
     });
 
     this.symbolBtn.addEventListener("click", () => {
       const currentText = this.symbolBtn.textContent;
       if (currentText === "❌") this.symbolBtn.textContent = "⭕";
       else if (currentText === "⭕") this.symbolBtn.textContent = "❌";
+      playBtnSFX();
     });
 
     this.cells.forEach((cell, index) => {
@@ -269,13 +276,26 @@ class DisplayController {
 
     this.difficultySelect.addEventListener("change", () => {
       this.startBtn.textContent = "Unsaved Changes!";
+      playBtnSFX();
     });
   }
 
   updateDisplay() {
     const board = this.gameController.gameboard.getBoard();
     this.cells.forEach((cell, index) => {
+      if (cell.textContent !== "") {
+        cell.classList.add("filled");
+      } else {
+        cell.classList.remove("filled");
+      }
       cell.textContent = board[index];
+    });
+  }
+
+  gameOver(message) {
+    this.cells.forEach((cell) => {
+      cell.classList.add("filled");
+      this.gameOverText.textContent = message;
     });
   }
 }
@@ -283,6 +303,26 @@ class DisplayController {
 // Initialize DisplayController and Automatically start game
 const displayController = new DisplayController();
 displayController.gameController.startGame("❌", "easy");
+
+// -----
+// AUDIO
+// -----
+function getRandomNumber() {
+  return Math.floor(Math.random() * 3) + 1;
+}
+
+function playBtnSFX() {
+  let randomNumber = getRandomNumber();
+  const sound = new Audio();
+  sound.src = `audio/btn-${randomNumber}.mp3`;
+  sound.play();
+}
+
+function playResetSFX() {
+  const sound = new Audio();
+  sound.src = `audio/reset.mp3`;
+  sound.play();
+}
 
 // ----
 // LOGO
